@@ -413,57 +413,57 @@ namespace JdSoft.Apple.Apns.Notifications
 		void newCon_NotificationSuccess(object sender, Notification notification)
 		{
 		    var onNotificationSuccess = NotificationSuccess;
-		    if (onNotificationSuccess != null)
-				NotificationSuccess(sender, notification);
+                    if (onNotificationSuccess != null)
+                        try { onNotificationSuccess(sender, notification); } catch {}	// Ignore all exceptions from callback function
 		}
 
-        void newCon_NotificationTooLong(object sender, NotificationLengthException ex)
+                void newCon_NotificationTooLong(object sender, NotificationLengthException ex)
 		{
 		    var onNotificationTooLong = NotificationTooLong;
-		    if (onNotificationTooLong != null)
-				NotificationTooLong(sender, ex);
+                    if (onNotificationTooLong != null)
+                        try { onNotificationTooLong(sender, ex); } catch {}	// Ignore all exceptions from callback function
 		}
 
-        void newCon_BadDeviceToken(object sender, BadDeviceTokenException ex)
+                void newCon_BadDeviceToken(object sender, BadDeviceTokenException ex)
 		{
 		    var onBadDeviceToken = BadDeviceToken;
-		    if (onBadDeviceToken != null)
-				BadDeviceToken(this, ex);
+                    if (onBadDeviceToken != null)
+                        try { onBadDeviceToken(this, ex); } catch {}	// Ignore all exceptions from callback function
 		}
 
-        void newCon_NotificationFailed(object sender, Notification failed)
+                void newCon_NotificationFailed(object sender, Notification failed)
 		{
 		    var onNotificationFailed = NotificationFailed;
-		    if (onNotificationFailed != null)
-				NotificationFailed(sender, failed);
+                    if (onNotificationFailed != null)
+                        try { onNotificationFailed(sender, failed); } catch {}	// Ignore all exceptions from callback function
 		}
 
-        void newCon_Error(object sender, Exception ex)
+                void newCon_Error(object sender, Exception ex)
 		{
 		    var onError = Error;
-		    if (onError != null)
-				Error(sender, ex);
+                    if (onError != null)
+                        try { onError(sender, ex); } catch {}	// Ignore all exceptions from callback function
 		}
 
-        void newCon_Disconnected(object sender)
+                void newCon_Disconnected(object sender)
 		{
 		    var onDisconnected = Disconnected;
-		    if (onDisconnected != null)
-				Disconnected(sender);
+                    if (onDisconnected != null)
+                        try { onDisconnected(sender); } catch {}	// Ignore all exceptions from callback function
 		}
 
-        void newCon_Connected(object sender)
+                void newCon_Connected(object sender)
 		{
 		    var onConnected = Connected;
-		    if (onConnected != null)
-				Connected(sender);
+                    if (onConnected != null)
+                        try { onConnected(sender); } catch {}	// Ignore all exceptions from callback function
 		}
 
-        void newCon_Connecting(object sender)
+                void newCon_Connecting(object sender)
 		{
 		    var onConnecting = Connecting;
-		    if (onConnecting != null)
-				onConnecting(sender);
+                    if (onConnecting != null)
+                        try { onConnecting(sender); } catch {}	// Ignore all exceptions from callback function
 		}
 
         private bool queueSequential(Notification notification)

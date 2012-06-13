@@ -334,29 +334,29 @@ namespace JdSoft.Apple.Apns.Notifications
 		void OnChannelDisconnected(object sender)
 		{
 		    var onDisconnected = Disconnected;
-		    if (onDisconnected != null)
-				onDisconnected(this);
+            if (onDisconnected != null)
+                try { onDisconnected(this); } catch {}      // Ignore exceptions from callback function
 		}
 
 	    void OnChannelConnecting(object sender)
 		{
 		    var onConnecting = Connecting;
-		    if (onConnecting != null)
-				onConnecting(this);
+            if (onConnecting != null)
+                try { onConnecting(this); } catch {}        // Ignore exceptions from callback function
 		}
 
 	    void OnChannelConnected(object sender)
 	    {
 	        var onConnected = Connected;
-	        if (onConnected != null)
-				onConnected(this);
+            if (onConnected != null)
+                try { onConnected(this); } catch {}         // Ignore exceptions from callback function
 	    }
 
 	    void OnChannelError(object sender, Exception ex)
 		{
 		    var onError = Error;
-		    if (onError != null)
-				onError(this, ex);
+            if (onError != null)
+                try { onError(this, ex); } catch {}         // Ignore exceptions from callback function
 		}
 
 	    private void workerMethod()
@@ -369,10 +369,8 @@ namespace JdSoft.Apple.Apns.Notifications
 					{
 						Notification notification = this.notifications.Dequeue();
 
-						int tries = 0;
 						bool sent = false;
-
-						while (!sent && tries < this.SendRetries)
+                        for(int i = 0; i < this.SendRetries && !sent; ++i)
 						{
 							try
 							{
@@ -388,18 +386,22 @@ namespace JdSoft.Apple.Apns.Notifications
 									{
 									    var onBadDeviceToken = BadDeviceToken;
 									    if (onBadDeviceToken != null)
-                                            onBadDeviceToken(this, btex);
+                                            try { onBadDeviceToken(this, btex); } catch {}          // Ignore all exceptions from callback
+
+                                        continue;
 									}
 									catch (NotificationLengthException nlex)
 									{
 									    var onNotificationTooLong = NotificationTooLong;
 									    if (onNotificationTooLong != null)
-											onNotificationTooLong(this, nlex);
+											try { onNotificationTooLong(this, nlex); } catch {}     // Ignore all exceptions from callback
+
+                                        continue;
 									}
 
 								    var onNotificationSuccess = NotificationSuccess;
 								    if (onNotificationSuccess != null)
-										onNotificationSuccess(this, notification);
+										try { onNotificationSuccess(this, notification); } catch {} // Ignore all exceptions from callback
 
 									sent = true;
 								}
@@ -412,25 +414,23 @@ namespace JdSoft.Apple.Apns.Notifications
 							{
 							    var onError = Error;
 							    if (onError != null)
-                                    onError(this, ex);
+                                    try { onError(this, ex); } catch {} // Ignore all exceptions from callback
 
 								apnsChannel.ForceReconnect();
 							}
-
-							tries++;
 						}
 
-						//Didn't send in 3 tries
+						//Didn't send in this.SendRetries tries
 					    var onNotificationFailed = NotificationFailed;
 					    if (!sent && onNotificationFailed != null)
-							onNotificationFailed(this, notification);
+							try { onNotificationFailed(this, notification); } catch {} // Ignore all exceptions from callback
 					}
 				}
 				catch (Exception ex)
 				{
 				    var onError = Error;
 				    if (onError != null)
-						onError(this, ex);
+						try { onError(this, ex); } catch {} // Ignore all exceptions from callback
 
 					apnsChannel.ForceReconnect();
 				}
